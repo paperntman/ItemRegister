@@ -7,7 +7,7 @@ public final class Main extends JavaPlugin{
 
     @Override
     public void onEnable() {
-        PluginCommand command = getCommand("item-registration");
+        PluginCommand command = getCommand("itemevent");
         assert command != null;
         command.setExecutor(new Registration());
         getServer().getPluginManager().registerEvents(new ItemEventHandler(), this);
