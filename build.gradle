@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'org.sudaping'
-version = '0.1'
+version = '0.2a'
 
 repositories {
     mavenCentral()
@@ -46,4 +46,8 @@ processResources {
     filesMatching('plugin.yml') {
         expand props
     }
+}
+
+jar {
+    destinationDirectory.set(file("C:/Users/chojj/OneDrive/Documents/server/plugins"))
 }

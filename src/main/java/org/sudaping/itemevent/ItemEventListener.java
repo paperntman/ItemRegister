@@ -1,9 +1,9 @@
-package org.sudaping.flying;
+package org.sudaping.itemevent;
 
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 
 public interface ItemEventListener {
-    public void onEvent(@NotNull PlayerInteractEvent event);
+    void onEvent(@NotNull PlayerInteractEvent event);
 
 }

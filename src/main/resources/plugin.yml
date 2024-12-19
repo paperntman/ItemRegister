@@ -1,8 +1,18 @@
-name: flying
-version: '0.1'
-main: org.sudaping.flying.Main
+name: itemRegister
+version: '0.2a'
+main: org.sudaping.itemevent.Main
 api-version: '1.20'
 
 commands:
   itemevent:
     description: "TODO"
+    aliases: [ie]
+  customrecipe:
+    description: "sans"
+    aliases: [cr]
+  debugdata:
+    description: "show itemmeta"
+    aliases: [db]
+  recipeannouncement:
+    description: "announcement on specific recipe"
+    aliases: [ra]
