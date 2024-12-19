@@ -70,6 +70,7 @@ public final class Main extends JavaPlugin{
         Objects.requireNonNull(getCommand("debugdata")).setExecutor(new DebugData());
         Objects.requireNonNull(getCommand("recipeannouncement")).setExecutor(new RecipeAnnouncement());
         Objects.requireNonNull(getCommand("recipeannouncement")).setTabCompleter(new RecipeAnnouncementTab());
+        Objects.requireNonNull(getCommand("fly")).setExecutor(new FlyCommand());
 
         getServer().getPluginManager().registerEvents(new ItemEventHandler(), this);
         getServer().getPluginManager().registerEvents(new Death(), this);
@@ -80,6 +81,7 @@ public final class Main extends JavaPlugin{
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, Fly::save, 0, 20);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Fly(), 0, 1);
+
 
     }
 

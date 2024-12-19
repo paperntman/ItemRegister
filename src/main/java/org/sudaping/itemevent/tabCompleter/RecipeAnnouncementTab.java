@@ -1,6 +1,5 @@
 package org.sudaping.itemevent.tabCompleter;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
@@ -32,12 +31,12 @@ public class RecipeAnnouncementTab implements TabCompleter {
                         Recipe recipe = recipeIterator.next();
                         if (recipe instanceof Keyed keyed) {
                             NamespacedKey key = keyed.getKey();
-                            if (key.toString().startsWith(args[1]) && !RecipeAnnouncement.keys.contains(key)) ret.add(key.toString());
+                            if ((key.toString().startsWith(args[1]))&& !RecipeAnnouncement.keys.contains(key)) ret.add(key.toString());
                         }
                     }
                     return ret;
                 }else if(args[0].equalsIgnoreCase("remove")){
-                    return RecipeAnnouncement.keys.stream().map(NamespacedKey::toString).filter(s ->s.startsWith(args[1])).collect(Collectors.toList());
+                    return RecipeAnnouncement.keys.stream().map(NamespacedKey::toString).filter(s -> s.startsWith(args[1])).collect(Collectors.toList());
                 }
             }
         }

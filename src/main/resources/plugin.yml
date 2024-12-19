@@ -1,5 +1,5 @@
 name: itemRegister
-version: '0.2a'
+version: '0.3'
 main: org.sudaping.itemevent.Main
 api-version: '1.20'
 
@@ -16,3 +16,5 @@ commands:
   recipeannouncement:
     description: "announcement on specific recipe"
     aliases: [ra]
+  fly:
+    description: "check last fly time"

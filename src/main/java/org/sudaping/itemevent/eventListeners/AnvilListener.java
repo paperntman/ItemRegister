@@ -2,7 +2,6 @@ package org.sudaping.itemevent.eventListeners;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
@@ -26,6 +25,7 @@ public class AnvilListener implements Listener {
             Set<Map.Entry<Enchantment, Integer>> entries = new HashSet<>();
             entries.addAll(meta.getStoredEnchants().entrySet());
             entries.addAll(meta.getEnchants().entrySet());
+            System.out.println(entries);
             for (Map.Entry<Enchantment, Integer> enchantmentIntegerEntry : entries) {
                 Enchantment enchantment = enchantmentIntegerEntry.getKey();
                 int level = enchantmentIntegerEntry.getValue();

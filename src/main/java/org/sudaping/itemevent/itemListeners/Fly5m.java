@@ -1,4 +1,4 @@
-package org.sudaping.itemevent.listeners;
+package org.sudaping.itemevent.itemListeners;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
