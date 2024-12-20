@@ -6,9 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.sudaping.itemevent.commands.*;
 import org.sudaping.itemevent.eventListeners.*;
 import org.sudaping.itemevent.runnables.Fly;
-import org.sudaping.itemevent.tabCompleter.RecipeAdderTab;
-import org.sudaping.itemevent.tabCompleter.RecipeAnnouncementTab;
-import org.sudaping.itemevent.tabCompleter.RegistrationTab;
+import org.sudaping.itemevent.tabCompleter.*;
 
 import java.io.*;
 import java.util.Objects;
@@ -71,6 +69,11 @@ public final class Main extends JavaPlugin{
         Objects.requireNonNull(getCommand("recipeannouncement")).setExecutor(new RecipeAnnouncement());
         Objects.requireNonNull(getCommand("recipeannouncement")).setTabCompleter(new RecipeAnnouncementTab());
         Objects.requireNonNull(getCommand("fly")).setExecutor(new FlyCommand());
+        Objects.requireNonNull(getCommand("커스텀레시피")).setExecutor(new RecipeViewCommand());
+        Objects.requireNonNull(getCommand("커스텀레시피")).setTabCompleter(new RecipeViewTab());
+        Objects.requireNonNull(getCommand("persistentdata")).setExecutor(new PersistentDataCommand());
+        Objects.requireNonNull(getCommand("persistentdata")).setTabCompleter(new PersistentDataTab());
+
 
         getServer().getPluginManager().registerEvents(new ItemEventHandler(), this);
         getServer().getPluginManager().registerEvents(new Death(), this);

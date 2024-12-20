@@ -18,3 +18,9 @@ commands:
     aliases: [ra]
   fly:
     description: "check last fly time"
+  커스텀레시피:
+    description: "레시피를 봅니다."
+    usage: "/커스텀레시피 <namespaceKey>"
+  persistentdata:
+    description: "put persistentData to hand item"
+    aliases: [pd]
