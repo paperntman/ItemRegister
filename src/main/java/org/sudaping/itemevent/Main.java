@@ -1,6 +1,7 @@
 package org.sudaping.itemevent;
 
 import org.bukkit.Bukkit;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.sudaping.itemevent.commands.*;
@@ -14,11 +15,14 @@ import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import static org.sudaping.itemevent.DiscordIntegration.jda;
+
 public final class Main extends JavaPlugin{
 
     public static File dataFolder;
     public static Main plugin;
     public static Logger logger;
+    public static InventoryHolder holder;
 
     public static void compressGzipFile(File file, ItemStack itemStack) {
         try (FileOutputStream fos = new FileOutputStream(file);
@@ -73,6 +77,8 @@ public final class Main extends JavaPlugin{
         Objects.requireNonNull(getCommand("커스텀레시피")).setTabCompleter(new RecipeViewTab());
         Objects.requireNonNull(getCommand("persistentdata")).setExecutor(new PersistentDataCommand());
         Objects.requireNonNull(getCommand("persistentdata")).setTabCompleter(new PersistentDataTab());
+        Objects.requireNonNull(getCommand("prefix")).setExecutor(new PrefixCommand());
+        Objects.requireNonNull(getCommand("prefix")).setTabCompleter(new PrefixTab());
 
 
         getServer().getPluginManager().registerEvents(new ItemEventHandler(), this);
@@ -81,6 +87,8 @@ public final class Main extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new DebugInventoryListener(), this);
         getServer().getPluginManager().registerEvents(new AnvilListener(), this);
         getServer().getPluginManager().registerEvents(new ItemCraftListener(), this);
+        getServer().getPluginManager().registerEvents(new PrefixInventoryListener(), this);
+        getServer().getPluginManager().registerEvents(new DiscordIntegration(), this);
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, Fly::save, 0, 20);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Fly(), 0, 1);
@@ -90,6 +98,6 @@ public final class Main extends JavaPlugin{
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        jda.shutdownNow();
     }
 }

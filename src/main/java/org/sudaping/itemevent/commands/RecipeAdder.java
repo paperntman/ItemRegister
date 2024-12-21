@@ -40,10 +40,6 @@ public class RecipeAdder implements CommandExecutor{
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!sender.isOp()){
-            sender.sendMessage(Component.text("권한이 없습니다!", NamedTextColor.RED));
-            return true;
-        }
         if (args.length == 0 || !List.of("add", "remove", "view").contains(args[0])){
             sender.sendMessage(Component.text("명령어를 입력해 주세요!", NamedTextColor.RED));
             return true;
@@ -54,6 +50,14 @@ public class RecipeAdder implements CommandExecutor{
         }
         if (!(sender instanceof Player player)){
             sender.sendMessage(Component.text("플레이어만 사용할 수 있습니다!", NamedTextColor.RED));
+            return true;
+        }
+        if (args[0].equalsIgnoreCase("view")){
+            view(args, player);
+            return true;
+        }
+        if (!sender.isOp()){
+            sender.sendMessage(Component.text("권한이 없습니다!", NamedTextColor.RED));
             return true;
         }
         if (args[0].equals("add")){
@@ -80,14 +84,12 @@ public class RecipeAdder implements CommandExecutor{
                     .append(Component.text(" [레시피 보기]", NamedTextColor.GOLD).clickEvent(ClickEvent.runCommand("/cr view "+args[1]))));
         } else if(args[0].equals("remove")){
             remove(args, player);
-        } else {
-            view(args, player);
         }
         return true;
     }
 
     private void view(@NotNull String[] args, Player player) {
-        Inventory inventory = Bukkit.createInventory(player, InventoryType.WORKBENCH, Component.text("DEBUG", NamedTextColor.GOLD));
+        Inventory inventory = Bukkit.createInventory(null, InventoryType.WORKBENCH, Component.text("DEBUG", NamedTextColor.GOLD));
         NamespacedKey namespacedKey = new NamespacedKey(Main.plugin, args[1]);
         AtomicBoolean present = new AtomicBoolean(false);
         CustomRecipe.recipes.stream().filter(a -> a.getKey().equals(namespacedKey)).findFirst().ifPresent(recipe -> {

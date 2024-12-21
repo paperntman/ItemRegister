@@ -9,7 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 public class DebugInventoryListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        if (e.getView().title().equals(Component.text("DEBUG", NamedTextColor.GOLD))) {
+        if (e.getView().title().equals(Component.text("DEBUG", NamedTextColor.GOLD)) && e.getClickedInventory() != null && e.getClickedInventory().getHolder() == null) {
             e.setCancelled(true);
         }
     }
