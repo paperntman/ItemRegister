@@ -40,9 +40,7 @@ public class Registration implements CommandExecutor {
             sender.sendMessage(Component.text("명령어를 입력해 주세요!").color(NamedTextColor.RED));
             return true;
         }
-        if (args[0].equalsIgnoreCase("register")){
-            register(sender, args, player);
-        }
+        register(sender, args, player);
         return true;
     }
 
@@ -52,15 +50,22 @@ public class Registration implements CommandExecutor {
             sender.sendMessage(Component.text("아이템에 커스텀 이름이 없습니다!").color(NamedTextColor.RED));
             return;
         }
-        if (args.length == 1){
+        if (args.length == 0){
             componentMap.remove(targetItemStack);
             sender.sendMessage(targetItemStack.displayName()
                     .append(Component.text("에 지정된 태그를 삭제했습니다!", NamedTextColor.GREEN)));
         }else{
-            componentMap.put(targetItemStack, args[1]);
+            ItemStack toRemove = null;
+            for (ItemStack itemStack : componentMap.keySet()) {
+                if (componentMap.get(itemStack).equalsIgnoreCase(args[0])){
+                    toRemove = itemStack;
+                }
+            }
+            if (toRemove != null) componentMap.remove(toRemove);
+            componentMap.put(targetItemStack, args[0]);
             sender.sendMessage(targetItemStack.displayName()
                     .append(Component.text("에 ", NamedTextColor.GREEN))
-                    .append(Component.text(args[1], NamedTextColor.GOLD))
+                    .append(Component.text(args[0], NamedTextColor.GOLD))
                     .append(Component.text(" 태그를 부여했습니다!", NamedTextColor.GREEN)));
         }
         save();

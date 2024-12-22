@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'org.sudaping'
-version = '0.4'
+version = '0.3'
 
 repositories {
     mavenCentral()
@@ -19,7 +19,6 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
-    implementation("net.dv8tion:JDA:5.2.1")
 }
 
 def targetJavaVersion = 17
@@ -34,7 +33,6 @@ java {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-
 
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release.set(targetJavaVersion)
@@ -51,9 +49,5 @@ processResources {
 }
 
 jar {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
     destinationDirectory.set(file("C:/Users/chojj/OneDrive/Documents/server/plugins"))
 }

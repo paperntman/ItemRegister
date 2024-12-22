@@ -1,5 +1,6 @@
 package org.sudaping.itemevent.tabCompleter;
 
+import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.command.Command;
@@ -30,13 +31,10 @@ public class PersistentDataTab implements TabCompleter {
             }
         }
         if (args.length == 2 && args[0].equals("set")) {
-            return Stream.of("structure", "biome").filter(s -> s.startsWith(args[1])).sorted().collect(Collectors.toList());
+            return Stream.of("structure").filter(s -> s.startsWith(args[1])).sorted().collect(Collectors.toList());
         }
         if (args.length == 3 && args[0].equals("set") && args[1].equals("structure")) {
             return Registry.STRUCTURE.stream().map(a -> a.key().value()).filter(s -> s.startsWith(args[2])).sorted().collect(Collectors.toList());
-        }
-        if (args.length == 3 && args[0].equals("set") && args[1].equals("biome")) {
-            return Registry.BIOME.stream().map(a -> a.key().value()).filter(s -> s.startsWith(args[2])).sorted().collect(Collectors.toList());
         }
         return List.of("");
     }

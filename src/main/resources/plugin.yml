@@ -1,5 +1,5 @@
 name: itemRegister
-version: '0.4'
+version: '0.3'
 main: org.sudaping.itemevent.Main
 api-version: '1.20'
 
@@ -24,6 +24,3 @@ commands:
   persistentdata:
     description: "put persistentData to hand item"
     aliases: [pd]
-  prefix:
-    description: "command about prefix"
-    aliases: [칭호]

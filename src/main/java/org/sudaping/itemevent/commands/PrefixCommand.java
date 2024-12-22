@@ -110,7 +110,10 @@ public class PrefixCommand implements CommandExecutor {
         if (args[0].equalsIgnoreCase("apply")){
             Player player = (Player) sender;
             if (args.length == 1){
-                sender.sendMessage(Component.text("칭호를 적어주세요!", NamedTextColor.RED));
+                player.displayName(Component.selector(player.getName()));
+                player.playerListName(player.displayName());
+                sender.sendMessage(Component.selector(player.getName())
+                        .append(Component.text("의 칭호를 제거했습니다!")));
                 return true;
             }
             if(playerPrefixMap.get(player.getUniqueId()) == null || !playerPrefixMap.get(player.getUniqueId()).contains(args[1])){
@@ -206,7 +209,7 @@ public class PrefixCommand implements CommandExecutor {
                     .append(Component.text("에게 칭호 "))
                     .append(prefixMap.get(args[2]))
                     .append(Component.text("를 지급하였습니다!")));
-            if (Bukkit.getPlayer(uniqueId) == null){
+            if (Bukkit.getPlayer(uniqueId) != null){
                 Bukkit.getPlayer(uniqueId).sendMessage(
                         Component.text("칭호 ")
                                 .append(prefixMap.get(args[2]))
