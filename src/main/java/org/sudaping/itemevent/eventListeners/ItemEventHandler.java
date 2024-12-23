@@ -37,11 +37,7 @@ public class ItemEventHandler implements Listener {
             String t_key = itemStackStringEntry.getValue();
             String key = null;
 
-            ItemMeta itemMeta = t_item.getItemMeta();
-            if (itemMeta == null) continue;
-            Component component = itemMeta.displayName();
-            if (component == null) continue;
-            if (component.equals(item.getItemMeta().displayName()))
+            if(t_item.isSimilar(item))
                 key = t_key;
 
             if(key == null) continue;
