@@ -1,5 +1,5 @@
 name: itemRegister
-version: '0.4'
+version: '0.5'
 main: org.sudaping.itemevent.Main
 api-version: '1.20'
 

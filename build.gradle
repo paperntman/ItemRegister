@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'org.sudaping'
-version = '0.4'
+version = '0.5'
 
 repositories {
     mavenCentral()
@@ -19,7 +19,6 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
-    implementation("net.dv8tion:JDA:5.2.1")
 }
 
 def targetJavaVersion = 17
@@ -51,9 +50,5 @@ processResources {
 }
 
 jar {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
     destinationDirectory.set(file("C:/Users/chojj/OneDrive/Documents/server/plugins"))
 }
