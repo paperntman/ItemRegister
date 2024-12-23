@@ -10,6 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.sudaping.itemevent.commands.CustomInventory;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,13 +31,16 @@ public class PersistentDataTab implements TabCompleter {
             }
         }
         if (args.length == 2 && args[0].equals("set")) {
-            return Stream.of("structure", "biome").filter(s -> s.startsWith(args[1])).sorted().collect(Collectors.toList());
+            return Stream.of("structure", "biome", "inventory", "message", "command").filter(s -> s.startsWith(args[1])).sorted().collect(Collectors.toList());
         }
         if (args.length == 3 && args[0].equals("set") && args[1].equals("structure")) {
             return Registry.STRUCTURE.stream().map(a -> a.key().value()).filter(s -> s.startsWith(args[2])).sorted().collect(Collectors.toList());
         }
         if (args.length == 3 && args[0].equals("set") && args[1].equals("biome")) {
             return Registry.BIOME.stream().map(a -> a.key().value()).filter(s -> s.startsWith(args[2])).sorted().collect(Collectors.toList());
+        }
+        if (args.length == 3 && args[0].equals("set") && args[1].equals("inventory")) {
+            return CustomInventory.inventoryMap.keySet().stream().filter(s -> s.startsWith(args[2])).sorted().collect(Collectors.toList());
         }
         return List.of("");
     }
