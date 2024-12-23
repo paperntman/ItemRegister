@@ -36,6 +36,8 @@ public class Death implements Listener {
                 drop.subtract();
                 e.setKeepInventory(true);
                 e.getDrops().clear();
+                e.setKeepLevel(true);
+                e.setDroppedExp(0);
                 return;
             }
         }
