@@ -84,7 +84,7 @@ public final class Main extends JavaPlugin{
 
 
         getServer().getPluginManager().registerEvents(new ItemEventHandler(), this);
-        getServer().getPluginManager().registerEvents(new Death(), this);
+        getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
         getServer().getPluginManager().registerEvents(new RecipeListener(), this);
         getServer().getPluginManager().registerEvents(new DebugInventoryListener(), this);
         getServer().getPluginManager().registerEvents(new AnvilListener(), this);
