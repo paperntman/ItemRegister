@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import static org.sudaping.itemevent.DiscordIntegration.jda;
 
 public final class Main extends JavaPlugin{
 
@@ -98,6 +97,5 @@ public final class Main extends JavaPlugin{
 
     @Override
     public void onDisable() {
-        jda.shutdownNow();
     }
 }
