@@ -1,16 +1,14 @@
 package org.sudaping.itemevent.eventListeners;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.sudaping.itemevent.commands.Registration;
 
 import java.util.Map;
 
-public class Death implements Listener {
+public class PlayerDeathListener implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
@@ -28,11 +26,7 @@ public class Death implements Listener {
             return;
         }
         for (ItemStack drop : e.getDrops()) {
-            ItemMeta itemMeta = drop.getItemMeta();
-            if (itemMeta == null) continue;
-            Component component = itemMeta.displayName();
-            if (component == null) continue;
-            if (component.equals(target.getItemMeta().displayName())){
+            if (target.isSimilar(drop)){
                 drop.subtract();
                 e.setKeepInventory(true);
                 e.getDrops().clear();
