@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-
 public final class Main extends JavaPlugin{
 
     public static File dataFolder;
@@ -78,6 +77,10 @@ public final class Main extends JavaPlugin{
         Objects.requireNonNull(getCommand("persistentdata")).setTabCompleter(new PersistentDataTab());
         Objects.requireNonNull(getCommand("prefix")).setExecutor(new PrefixCommand());
         Objects.requireNonNull(getCommand("prefix")).setTabCompleter(new PrefixTab());
+        Objects.requireNonNull(getCommand("custominventory")).setExecutor(new CustomInventory());
+        Objects.requireNonNull(getCommand("custominventory")).setTabCompleter(new CustomInventoryTab());
+        Objects.requireNonNull(getCommand("help")).setExecutor(new HELP());
+        Objects.requireNonNull(getCommand("help")).setTabCompleter(new HELPTab());
 
 
         getServer().getPluginManager().registerEvents(new ItemEventHandler(), this);
@@ -87,7 +90,7 @@ public final class Main extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new AnvilListener(), this);
         getServer().getPluginManager().registerEvents(new ItemCraftListener(), this);
         getServer().getPluginManager().registerEvents(new PrefixInventoryListener(), this);
-        getServer().getPluginManager().registerEvents(new DiscordIntegration(), this);
+        getServer().getPluginManager().registerEvents(new CustomInventoryListener(), this);
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, Fly::save, 0, 20);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Fly(), 0, 1);
