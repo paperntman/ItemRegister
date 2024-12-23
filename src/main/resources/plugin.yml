@@ -27,3 +27,7 @@ commands:
   prefix:
     description: "command about prefix"
     aliases: [칭호]
+  custominventory:
+    aliases: [ci]
+  help:
+    aliases: [도움말]
