@@ -14,7 +14,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sudaping.itemevent.Main;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PersistentDataCommand implements CommandExecutor {
     @Override
@@ -43,7 +45,8 @@ public class PersistentDataCommand implements CommandExecutor {
         if (itemMeta == null) return true;
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
         if (args[0].equalsIgnoreCase("set")){
-            container.set(new NamespacedKey(Main.plugin, args[1]), PersistentDataType.STRING, args[2]);
+            String collect = Arrays.stream(args).skip(2).collect(Collectors.joining(" "));
+            container.set(new NamespacedKey(Main.plugin, args[1]), PersistentDataType.STRING, collect);
             player.getInventory().getItemInMainHand().setItemMeta(itemMeta);
             return true;
         }
