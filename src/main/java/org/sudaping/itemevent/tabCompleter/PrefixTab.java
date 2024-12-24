@@ -8,6 +8,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.sudaping.itemevent.Prefix;
 import org.sudaping.itemevent.commands.PrefixCommand;
 
 import java.util.ArrayList;
@@ -29,17 +30,17 @@ public class PrefixTab implements TabCompleter {
             }
             case 2:{
                 if (args[0].equalsIgnoreCase("remove")) {
-                    completions.addAll(PrefixCommand.getPrefixMap().keySet());
+                    completions.addAll(Prefix.getPrefixMap().keySet());
                     break;
                 }
                 if (args[0].equalsIgnoreCase("apply")) {
                     if(sender instanceof Player player){
-                        completions.addAll(PrefixCommand.getPlayerPrefixMap().get(player.getUniqueId()));
+                        completions.addAll(Prefix.getPlayerPrefixMap().get(player.getUniqueId()));
                     }
                     break;
                 }
                 if (List.of("give", "take", "set", "list").contains(args[0])) {
-                    completions.addAll(PrefixCommand.getPlayerPrefixMap().keySet().stream().map(Bukkit::getOfflinePlayer).map(OfflinePlayer::getName).toList());
+                    completions.addAll(Prefix.getPlayerPrefixMap().keySet().stream().map(Bukkit::getOfflinePlayer).map(OfflinePlayer::getName).toList());
                     completions.addAll(Arrays.stream(Bukkit.getOfflinePlayers())
                             .map(OfflinePlayer::getName).toList());
                     break;
@@ -47,7 +48,7 @@ public class PrefixTab implements TabCompleter {
             }
             case 3:{
                 var ref = new Object() {
-                    List<String> strings = PrefixCommand.getPlayerPrefixMap().get(Bukkit.getOfflinePlayer(args[1]).getUniqueId());
+                    List<String> strings = Prefix.getPlayerPrefixMap().get(Bukkit.getOfflinePlayer(args[1]).getUniqueId());
                 };
                 if (ref.strings == null) ref.strings = new ArrayList<>();
                 if (List.of("take", "set").contains(args[0])) {
@@ -55,7 +56,7 @@ public class PrefixTab implements TabCompleter {
                     break;
                 }
                 if (args[0].equalsIgnoreCase("give")){
-                    completions.addAll(PrefixCommand.getPrefixMap().keySet().stream().filter(
+                    completions.addAll(Prefix.getPrefixMap().keySet().stream().filter(
                             s -> !ref.strings.contains(s)).toList());
                 }
             }
