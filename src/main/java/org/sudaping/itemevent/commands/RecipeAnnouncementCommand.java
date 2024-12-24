@@ -10,7 +10,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.sudaping.itemevent.Archive;
-import org.sudaping.itemevent.Main;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +17,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class RecipeAnnouncement implements CommandExecutor {
+public class RecipeAnnouncementCommand implements CommandExecutor {
 
-    private final Archive archive = Archive.load(RecipeAnnouncement.class);
+    private final Archive archive = Archive.load(RecipeAnnouncementCommand.class);
     public static final List<NamespacedKey> keys = new ArrayList<>();
 
-    public RecipeAnnouncement() {
+    public RecipeAnnouncementCommand() {
         String read = archive.read();
         for (String s : read.split("\n")) {
             NamespacedKey e = NamespacedKey.fromString(s);

@@ -17,12 +17,12 @@ import org.sudaping.itemevent.Main;
 import java.io.File;
 import java.util.*;
 
-public class CustomInventory implements CommandExecutor {
+public class CustomInventoryCommand implements CommandExecutor {
 
     public static final Map<String, Inventory> inventoryMap = new HashMap<>();
     public static final Map<Player, String> modifying = new HashMap<>();
 
-    public CustomInventory() {
+    public CustomInventoryCommand() {
         load();
     }
 

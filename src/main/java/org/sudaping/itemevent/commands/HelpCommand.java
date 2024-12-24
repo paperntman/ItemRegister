@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
-import static org.sudaping.itemevent.commands.CustomInventory.inventoryMap;
+import static org.sudaping.itemevent.commands.CustomInventoryCommand.inventoryMap;
 
-public class HELP implements CommandExecutor {
+public class HelpCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {

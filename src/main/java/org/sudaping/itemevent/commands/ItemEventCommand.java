@@ -14,12 +14,12 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Registration implements CommandExecutor {
+public class ItemEventCommand implements CommandExecutor {
 
     public static Map<ItemStack, String> componentMap = new HashMap<>();
     public static File classpath;
 
-    public Registration(){
+    public ItemEventCommand(){
         classpath = new File(Main.dataFolder + File.separator + "components");
         load();
     }

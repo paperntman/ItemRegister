@@ -11,13 +11,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.Recipe;
 import org.sudaping.itemevent.Archive;
-import org.sudaping.itemevent.commands.RecipeAnnouncement;
+import org.sudaping.itemevent.commands.RecipeAnnouncementCommand;
 
 public class ItemCraftListener implements Listener {
     private static final Archive archive = Archive.load(ItemCraftListener.class);
     @EventHandler
     public void onCraft(CraftItemEvent event){
-        if (RecipeAnnouncement.keys.stream().map(Bukkit::getRecipe).anyMatch(r -> {
+        if (RecipeAnnouncementCommand.keys.stream().map(Bukkit::getRecipe).anyMatch(r -> {
             if (r == null) return false;
             return recipesEquals(event.getRecipe(), r);
         })) {

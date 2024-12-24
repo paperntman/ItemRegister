@@ -5,7 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.sudaping.itemevent.commands.CustomInventory;
+import org.sudaping.itemevent.commands.CustomInventoryCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class CustomInventoryTab implements TabCompleter {
             case 1 -> completions.addAll(List.of("create", "remove", "modify", "list", "view"));
             case 2 -> {
                 if (List.of("modify", "remove", "view").contains(args[0]))
-                    completions.addAll(CustomInventory.inventoryMap.keySet());
+                    completions.addAll(CustomInventoryCommand.inventoryMap.keySet());
             }
         }
         return completions.stream().filter(s -> s.startsWith(args[args.length-1])).sorted().collect(Collectors.toList());

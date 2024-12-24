@@ -8,7 +8,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.inventory.Recipe;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.sudaping.itemevent.commands.RecipeAnnouncement;
+import org.sudaping.itemevent.commands.RecipeAnnouncementCommand;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,12 +31,12 @@ public class RecipeAnnouncementTab implements TabCompleter {
                         Recipe recipe = recipeIterator.next();
                         if (recipe instanceof Keyed keyed) {
                             NamespacedKey key = keyed.getKey();
-                            if ((key.toString().startsWith(args[1]))&& !RecipeAnnouncement.keys.contains(key)) ret.add(key.toString());
+                            if ((key.toString().startsWith(args[1]))&& !RecipeAnnouncementCommand.keys.contains(key)) ret.add(key.toString());
                         }
                     }
                     return ret;
                 }else if(args[0].equalsIgnoreCase("remove")){
-                    return RecipeAnnouncement.keys.stream().map(NamespacedKey::toString).filter(s -> s.startsWith(args[1])).collect(Collectors.toList());
+                    return RecipeAnnouncementCommand.keys.stream().map(NamespacedKey::toString).filter(s -> s.startsWith(args[1])).collect(Collectors.toList());
                 }
             }
         }

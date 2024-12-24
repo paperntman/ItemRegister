@@ -63,12 +63,12 @@ public final class Main extends JavaPlugin{
         logger = JavaPlugin.getPlugin(Main.class).getLogger();
         plugin = this;
 
-        Objects.requireNonNull(getCommand("itemevent")).setExecutor(new Registration());
+        Objects.requireNonNull(getCommand("itemevent")).setExecutor(new ItemEventCommand());
         Objects.requireNonNull(getCommand("itemevent")).setTabCompleter(new RegistrationTab());
-        Objects.requireNonNull(getCommand("customrecipe")).setExecutor(new RecipeAdder());
+        Objects.requireNonNull(getCommand("customrecipe")).setExecutor(new CustomRecipeCommand());
         Objects.requireNonNull(getCommand("customrecipe")).setTabCompleter(new RecipeAdderTab());
-        Objects.requireNonNull(getCommand("debugdata")).setExecutor(new DebugData());
-        Objects.requireNonNull(getCommand("recipeannouncement")).setExecutor(new RecipeAnnouncement());
+        Objects.requireNonNull(getCommand("debugdata")).setExecutor(new DebugDataCommand());
+        Objects.requireNonNull(getCommand("recipeannouncement")).setExecutor(new RecipeAnnouncementCommand());
         Objects.requireNonNull(getCommand("recipeannouncement")).setTabCompleter(new RecipeAnnouncementTab());
         Objects.requireNonNull(getCommand("fly")).setExecutor(new FlyCommand());
         Objects.requireNonNull(getCommand("커스텀레시피")).setExecutor(new RecipeViewCommand());
@@ -77,9 +77,9 @@ public final class Main extends JavaPlugin{
         Objects.requireNonNull(getCommand("persistentdata")).setTabCompleter(new PersistentDataTab());
         Objects.requireNonNull(getCommand("prefix")).setExecutor(new PrefixCommand());
         Objects.requireNonNull(getCommand("prefix")).setTabCompleter(new PrefixTab());
-        Objects.requireNonNull(getCommand("custominventory")).setExecutor(new CustomInventory());
+        Objects.requireNonNull(getCommand("custominventory")).setExecutor(new CustomInventoryCommand());
         Objects.requireNonNull(getCommand("custominventory")).setTabCompleter(new CustomInventoryTab());
-        Objects.requireNonNull(getCommand("help")).setExecutor(new HELP());
+        Objects.requireNonNull(getCommand("help")).setExecutor(new HelpCommand());
         Objects.requireNonNull(getCommand("help")).setTabCompleter(new HELPTab());
 
 

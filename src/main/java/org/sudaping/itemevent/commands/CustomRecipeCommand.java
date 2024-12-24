@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
 
-public class RecipeAdder implements CommandExecutor{
+public class CustomRecipeCommand implements CommandExecutor{
 
-    public RecipeAdder() {
+    public CustomRecipeCommand() {
         File dir = new File(Main.plugin.getDataFolder(), "recipes");
         String[] list = dir.list();
         if (list != null) {
