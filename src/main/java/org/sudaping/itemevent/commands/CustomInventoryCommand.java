@@ -32,6 +32,10 @@ public class CustomInventoryCommand implements CommandExecutor {
             sender.sendMessage(Component.text("권한이 없습니다!", NamedTextColor.RED));
             return true;
         }
+        if (args.length == 0) {
+            sender.sendMessage(Component.text("명령어를 적어 주세요!", NamedTextColor.RED));
+            return true;
+        }
         switch (args[0]) {
             case "create" -> create(sender, args);
             case "list" -> list(sender, args);
