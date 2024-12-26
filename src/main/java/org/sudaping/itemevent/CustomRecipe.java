@@ -1,10 +1,13 @@
 package org.sudaping.itemevent;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -74,6 +77,20 @@ public class CustomRecipe {
             Main.compressGzipFile(new File(recipeFolder.getAbsolutePath() + File.separator + i+".gz"), ingredients.get(i));
         }
         Main.compressGzipFile(new File(recipeFolder.getAbsolutePath() + File.separator +"result.gz"), result);
+    }
+
+    public static CustomRecipe getCustomRecipeByName(String name, CustomRecipe target) {
+        for (CustomRecipe recipe : CustomRecipe.recipes) {
+            ItemStack result = recipe.getResult();
+            ItemMeta itemMeta = result.getItemMeta();
+            if (itemMeta == null) continue;
+            Component component = itemMeta.displayName();
+            if (!(component instanceof TextComponent textComponent)) continue;
+            if (textComponent.content().equalsIgnoreCase(name)) {
+                target = recipe;
+            }
+        }
+        return target;
     }
 
     public static CustomRecipe load(String key) {
