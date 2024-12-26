@@ -15,10 +15,12 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+    implementation 'com.github.Oheers.EvenMoreFish:even-more-fish-api:v1.7.4-SNAPSHOT-26-11-2024'
 }
 
 def targetJavaVersion = 17
