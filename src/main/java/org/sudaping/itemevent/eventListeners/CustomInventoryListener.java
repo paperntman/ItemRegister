@@ -3,6 +3,7 @@ package org.sudaping.itemevent.eventListeners;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -15,8 +16,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitTask;
 import org.sudaping.itemevent.Main;
 import org.sudaping.itemevent.commands.CustomInventoryCommand;
+
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class CustomInventoryListener implements Listener {
 
@@ -58,7 +64,26 @@ public class CustomInventoryListener implements Listener {
             Clicked.sendMessage(GsonComponentSerializer.gson().deserialize(message));
         }
         if (command != null && Clicked instanceof Player player){
-            player.performCommand(command);
+            String[] split = command.split(" ");
+            int delay = Integer.parseInt(split[0]);
+            String target = Arrays.stream(split).skip(1).collect(Collectors.joining(" "));
+            AtomicInteger timeLeft = new AtomicInteger(delay);
+            BukkitTask bukkitTask = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.plugin,
+                    () ->
+                    {
+                        if (timeLeft.get() == 0) return;
+                        player.sendMessage("실행까지 "+timeLeft.getAndDecrement()+"초 남았습니다.");
+                    },
+                    0L, 20L);
+
+            Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                if (!player.isOp()){
+                    player.setOp(true);
+                    player.performCommand(target);
+                    player.setOp(false);
+                }else player.performCommand(target);
+                bukkitTask.cancel();
+            }, delay* 20L);
         }
     }
 }
