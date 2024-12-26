@@ -30,7 +30,7 @@ public class PrefixInventoryListener implements Listener {
             String name = meta.getPersistentDataContainer().get(new NamespacedKey(Main.plugin, "prefix"), PersistentDataType.STRING);
             if (name == null) return;
             if (e.getWhoClicked() instanceof Player player) {
-                player.performCommand("prefix apply "+name);
+                player.performCommand("prefix set "+name);
             }
             return;
         }
