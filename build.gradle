@@ -50,5 +50,5 @@ processResources {
 }
 
 jar {
-    destinationDirectory.set(file("C:/Users/chojj/OneDrive/Documents/server/plugins"))
+    destinationDirectory.set(file("C:/Users/chojj/Documents/server/plugins"))
 }
