@@ -17,12 +17,12 @@ import org.sudaping.itemevent.Main;
 import java.io.File;
 import java.util.*;
 
-public class CustomInventory implements CommandExecutor {
+public class CustomInventoryCommand implements CommandExecutor {
 
     public static final Map<String, Inventory> inventoryMap = new HashMap<>();
     public static final Map<Player, String> modifying = new HashMap<>();
 
-    public CustomInventory() {
+    public CustomInventoryCommand() {
         load();
     }
 
@@ -30,6 +30,10 @@ public class CustomInventory implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!sender.isOp()){
             sender.sendMessage(Component.text("권한이 없습니다!", NamedTextColor.RED));
+            return true;
+        }
+        if (args.length == 0) {
+            sender.sendMessage(Component.text("명령어를 적어 주세요!", NamedTextColor.RED));
             return true;
         }
         switch (args[0]) {

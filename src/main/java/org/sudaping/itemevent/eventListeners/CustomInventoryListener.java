@@ -16,17 +16,17 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.sudaping.itemevent.Main;
-import org.sudaping.itemevent.commands.CustomInventory;
+import org.sudaping.itemevent.commands.CustomInventoryCommand;
 
 public class CustomInventoryListener implements Listener {
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         HumanEntity entity = event.getPlayer();
-        if (entity instanceof Player player && CustomInventory.modifying.containsKey(player)){
-            CustomInventory.inventoryMap.put(CustomInventory.modifying.get(player), event.getInventory());
-            CustomInventory.save();
-            CustomInventory.modifying.remove(player);
+        if (entity instanceof Player player && CustomInventoryCommand.modifying.containsKey(player)){
+            CustomInventoryCommand.inventoryMap.put(CustomInventoryCommand.modifying.get(player), event.getInventory());
+            CustomInventoryCommand.save();
+            CustomInventoryCommand.modifying.remove(player);
         }
     }
 
@@ -38,7 +38,7 @@ public class CustomInventoryListener implements Listener {
         Inventory clickedInventory = event.getClickedInventory();
         if (!(clickedInventory != null && clickedInventory.getHolder() == null)) return;
         HumanEntity Clicked = event.getWhoClicked();
-        if (Clicked instanceof Player player && CustomInventory.modifying.containsKey(player)) return;
+        if (Clicked instanceof Player player && CustomInventoryCommand.modifying.containsKey(player)) return;
         event.setCancelled(true);
         ItemStack currentItem = event.getCurrentItem();
         if (currentItem == null) return;
@@ -49,7 +49,7 @@ public class CustomInventoryListener implements Listener {
         String message = persistentDataContainer.get(new NamespacedKey(Main.plugin, "message"), PersistentDataType.STRING);
         String command = persistentDataContainer.get(new NamespacedKey(Main.plugin, "command"), PersistentDataType.STRING);
         if (inventory != null){
-            Inventory toOpen = CustomInventory.inventoryMap.get(inventory);
+            Inventory toOpen = CustomInventoryCommand.inventoryMap.get(inventory);
             if (toOpen != null){
                 Clicked.openInventory(toOpen);
             }

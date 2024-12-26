@@ -1,15 +1,13 @@
 package org.sudaping.itemevent.eventListeners;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.sudaping.itemevent.ItemEventListener;
-import org.sudaping.itemevent.commands.Registration;
+import org.sudaping.itemevent.commands.ItemEventCommand;
 import org.sudaping.itemevent.itemListeners.Fly5m;
 import org.sudaping.itemevent.itemListeners.Locate;
 
@@ -28,11 +26,11 @@ public class ItemEventHandler implements Listener {
 
     @EventHandler
     public void onInteraction(PlayerInteractEvent e){
-        if (e.getHand() == null || e.getHand().equals(EquipmentSlot.OFF_HAND) || e.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
+        if (e.getHand() == null || e.getHand().equals(EquipmentSlot.OFF_HAND) || !e.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
         ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
         if (item.getItemMeta() == null) return;
 
-        for (Map.Entry<ItemStack, String> itemStackStringEntry : Registration.componentMap.entrySet()) {
+        for (Map.Entry<ItemStack, String> itemStackStringEntry : ItemEventCommand.componentMap.entrySet()) {
             ItemStack t_item = itemStackStringEntry.getKey();
             String t_key = itemStackStringEntry.getValue();
             String key = null;

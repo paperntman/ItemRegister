@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.sudaping.itemevent.commands.CustomInventory;
+import org.sudaping.itemevent.commands.CustomInventoryCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ public class PersistentDataTab implements TabCompleter {
             completions.addAll(Registry.BIOME.stream().map(a -> a.key().value()).toList());
         }
         if (args.length == 3 && args[0].equals("set") && args[1].equals("inventory")) {
-            completions.addAll(CustomInventory.inventoryMap.keySet());
+            completions.addAll(CustomInventoryCommand.inventoryMap.keySet());
         }
         return completions.stream().filter(s -> s.startsWith(args[args.length-1])).sorted().toList();
     }

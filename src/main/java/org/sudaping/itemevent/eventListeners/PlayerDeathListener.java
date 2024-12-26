@@ -4,7 +4,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.sudaping.itemevent.commands.Registration;
+import org.sudaping.itemevent.commands.ItemEventCommand;
 
 import java.util.Map;
 
@@ -14,7 +14,7 @@ public class PlayerDeathListener implements Listener {
     public void onDeath(PlayerDeathEvent e) {
         ItemStack target = null;
         if (e.getKeepInventory()) return;
-        for (Map.Entry<ItemStack, String> itemStackStringEntry : Registration.componentMap.entrySet()) {
+        for (Map.Entry<ItemStack, String> itemStackStringEntry : ItemEventCommand.componentMap.entrySet()) {
             ItemStack itemStack = itemStackStringEntry.getKey();
             String tag = itemStackStringEntry.getValue();
 

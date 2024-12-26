@@ -14,12 +14,12 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Registration implements CommandExecutor {
+public class ItemEventCommand implements CommandExecutor {
 
     public static Map<ItemStack, String> componentMap = new HashMap<>();
     public static File classpath;
 
-    public Registration(){
+    public ItemEventCommand(){
         classpath = new File(Main.dataFolder + File.separator + "components");
         load();
     }
@@ -40,19 +40,19 @@ public class Registration implements CommandExecutor {
             sender.sendMessage(Component.text("명령어를 입력해 주세요!").color(NamedTextColor.RED));
             return true;
         }
-        register(sender, args, player);
+        register(args, player);
         return true;
     }
 
-    private static void register(@NotNull CommandSender sender, @NotNull String @NotNull [] args, Player player) {
+    private static void register(@NotNull String @NotNull [] args, Player player) {
         ItemStack targetItemStack = player.getInventory().getItemInMainHand().asOne();
         if (targetItemStack.getItemMeta() == null || targetItemStack.getItemMeta().displayName() == null){
-            sender.sendMessage(Component.text("아이템에 커스텀 이름이 없습니다!").color(NamedTextColor.RED));
+            player.sendMessage(Component.text("아이템에 커스텀 이름이 없습니다!").color(NamedTextColor.RED));
             return;
         }
         if (args.length == 0){
             componentMap.remove(targetItemStack);
-            sender.sendMessage(targetItemStack.displayName()
+            player.sendMessage(targetItemStack.displayName()
                     .append(Component.text("에 지정된 태그를 삭제했습니다!", NamedTextColor.GREEN)));
         }else{
             ItemStack toRemove = null;
@@ -63,7 +63,7 @@ public class Registration implements CommandExecutor {
             }
             if (toRemove != null) componentMap.remove(toRemove);
             componentMap.put(targetItemStack, args[0]);
-            sender.sendMessage(targetItemStack.displayName()
+            player.sendMessage(targetItemStack.displayName()
                     .append(Component.text("에 ", NamedTextColor.GREEN))
                     .append(Component.text(args[0], NamedTextColor.GOLD))
                     .append(Component.text(" 태그를 부여했습니다!", NamedTextColor.GREEN)));
