@@ -1,5 +1,6 @@
 package org.sudaping.itemevent;
 
+import com.oheers.fish.api.reward.RewardType;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -92,12 +93,11 @@ public final class Main extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new PrefixInventoryListener(), this);
         getServer().getPluginManager().registerEvents(new CustomInventoryListener(), this);
         getServer().getPluginManager().registerEvents(new CustomInventoryCommandMoveListener(), this);
+        getServer().getPluginManager().registerEvents(new EMFAddon(), this);
 
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, Fly::save, 0, 20);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Fly(), 0, 1);
-
-
     }
 
     @Override

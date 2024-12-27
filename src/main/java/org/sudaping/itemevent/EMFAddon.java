@@ -1,11 +1,14 @@
 package org.sudaping.itemevent;
+import com.oheers.fish.api.reward.EMFRewardsLoadEvent;
 import com.oheers.fish.api.reward.RewardType;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-public class EMFAddon implements RewardType{
+public class EMFAddon implements RewardType, Listener {
 
 
     /**
@@ -18,7 +21,9 @@ public class EMFAddon implements RewardType{
 
     @Override
     public void doReward(@NotNull Player player, @NotNull String key, @NotNull String value, Location location) {
-
+        System.out.println("fking?");
+        Prefix.givePrefix(player.getUniqueId(), value);
+        Main.logger.info("gave prefix "+value+" to "+player.getUniqueId());
     }
 
     @Override
@@ -34,5 +39,10 @@ public class EMFAddon implements RewardType{
     @Override
     public @NotNull JavaPlugin getPlugin() {
         return Main.plugin;
+    }
+
+    @EventHandler
+    public void onLoad(EMFRewardsLoadEvent event){
+        this.register();
     }
 }
