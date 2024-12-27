@@ -91,6 +91,8 @@ public final class Main extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new ItemCraftListener(), this);
         getServer().getPluginManager().registerEvents(new PrefixInventoryListener(), this);
         getServer().getPluginManager().registerEvents(new CustomInventoryListener(), this);
+        getServer().getPluginManager().registerEvents(new CustomInventoryCommandMoveListener(), this);
+
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, Fly::save, 0, 20);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Fly(), 0, 1);

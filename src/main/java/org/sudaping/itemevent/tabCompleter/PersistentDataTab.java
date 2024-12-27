@@ -1,6 +1,7 @@
 package org.sudaping.itemevent.tabCompleter;
 
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.command.Command;
@@ -12,9 +13,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.sudaping.itemevent.Main;
 import org.sudaping.itemevent.commands.CustomInventoryCommand;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -45,6 +49,16 @@ public class PersistentDataTab implements TabCompleter {
         }
         if (args.length == 3 && args[0].equals("set") && args[1].equals("inventory")) {
             completions.addAll(CustomInventoryCommand.inventoryMap.keySet());
+        }
+        if (args.length == 3 && args[0].equals("set") && args[1].equals("message") && args[2].startsWith("\\f")) {
+            File file = new File(
+                    Main.plugin.getDataFolder().getAbsolutePath()
+                            + File.separator
+                            + "json");
+            File[] list = file.listFiles();
+            if (list != null) {
+                completions.addAll(Arrays.stream(list).map(File::getName).map(s -> "\\f"+s).toList());
+            }
         }
         return completions.stream().filter(s -> s.startsWith(args[args.length-1])).sorted().toList();
     }
