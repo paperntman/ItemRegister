@@ -60,8 +60,8 @@ public class PersistentDataTab implements TabCompleter {
                 completions.addAll(Arrays.stream(list).map(File::getName).map(s -> "\\f"+s).toList());
             }
         }
-        if (args.length > 2 && args[0].equals("set") && args[1].equals("command")) {
-            String trim = Arrays.stream(args).skip(2).collect(Collectors.joining(" "));
+        if (args.length > 3 && args[0].equals("set") && args[1].equals("command")) {
+            String trim = Arrays.stream(args).skip(3).collect(Collectors.joining(" "));
             System.out.println(trim);
             List<String> c = Bukkit.getCommandMap().tabComplete(sender, trim);
             if (c == null) c = new ArrayList<>();
