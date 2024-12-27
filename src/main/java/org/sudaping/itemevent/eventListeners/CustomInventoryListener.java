@@ -20,11 +20,17 @@ import org.bukkit.scheduler.BukkitTask;
 import org.sudaping.itemevent.Main;
 import org.sudaping.itemevent.commands.CustomInventoryCommand;
 
+import java.io.*;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class CustomInventoryListener implements Listener {
+
+    public static final Map<Player, List<BukkitTask>> tasks = new HashMap<>();
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
@@ -61,14 +67,42 @@ public class CustomInventoryListener implements Listener {
             }
         }
         if (message != null){
-            Clicked.sendMessage(GsonComponentSerializer.gson().deserialize(message));
+            if (message.startsWith("\\f")){
+                message = message.replace("\\f", "");
+                File file = new File(
+                        Main.plugin.getDataFolder().getAbsolutePath()
+                                + File.separator
+                                + "json"
+                                + File.separator
+                                + message
+                                + (message.endsWith(".json") ? "" : ".json"));
+                file.getParentFile().mkdirs();
+                if (file.exists()){
+                    StringBuilder sb = new StringBuilder();
+                    try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                        String line = br.readLine();
+                        while (line != null) {
+                            sb.append(line);
+                            line = br.readLine();
+                        }
+                    } catch (IOException e) {
+                        Main.logger.severe("Could not read json file "+file.getAbsolutePath());
+                        return;
+                    }
+                    Clicked.sendMessage(GsonComponentSerializer.gson().deserialize(sb.toString()));
+                }
+            } else Clicked.sendMessage(GsonComponentSerializer.gson().deserialize(message));
         }
         if (command != null && Clicked instanceof Player player){
             String[] split = command.split(" ");
             int delay = Integer.parseInt(split[0]);
             String target = Arrays.stream(split).skip(1).collect(Collectors.joining(" "));
+            if (tasks.containsKey(player)){
+                player.sendMessage(Component.text("한 번에 한 개의 명령어만 실행해 주세요!", NamedTextColor.RED));
+                return;
+            }
             AtomicInteger timeLeft = new AtomicInteger(delay);
-            BukkitTask bukkitTask = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.plugin,
+            BukkitTask runTaskTimerAsynchronously = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.plugin,
                     () ->
                     {
                         if (timeLeft.get() == 0) return;
@@ -76,14 +110,15 @@ public class CustomInventoryListener implements Listener {
                     },
                     0L, 20L);
 
-            Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
-                if (!player.isOp()){
+            BukkitTask runTaskLater = Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+                if (!player.isOp()) {
                     player.setOp(true);
                     player.performCommand(target);
                     player.setOp(false);
-                }else player.performCommand(target);
-                bukkitTask.cancel();
-            }, delay* 20L);
+                } else player.performCommand(target);
+                runTaskTimerAsynchronously.cancel();
+            }, delay * 20L);
+            tasks.put(player, List.of(runTaskTimerAsynchronously, runTaskLater));
         }
     }
 }
