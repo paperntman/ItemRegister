@@ -117,6 +117,7 @@ public class CustomInventoryListener implements Listener {
                     player.setOp(false);
                 } else player.performCommand(target);
                 runTaskTimerAsynchronously.cancel();
+                tasks.remove(player);
             }, delay * 20L);
             tasks.put(player, List.of(runTaskTimerAsynchronously, runTaskLater));
         }
