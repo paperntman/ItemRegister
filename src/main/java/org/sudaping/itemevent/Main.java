@@ -1,6 +1,5 @@
 package org.sudaping.itemevent;
 
-import com.oheers.fish.api.reward.RewardType;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -65,9 +64,9 @@ public final class Main extends JavaPlugin{
         plugin = this;
 
         Objects.requireNonNull(getCommand("itemevent")).setExecutor(new ItemEventCommand());
-        Objects.requireNonNull(getCommand("itemevent")).setTabCompleter(new RegistrationTab());
+        Objects.requireNonNull(getCommand("itemevent")).setTabCompleter(new ItemEventTab());
         Objects.requireNonNull(getCommand("customrecipe")).setExecutor(new CustomRecipeCommand());
-        Objects.requireNonNull(getCommand("customrecipe")).setTabCompleter(new RecipeAdderTab());
+        Objects.requireNonNull(getCommand("customrecipe")).setTabCompleter(new CustomRecipeTab());
         Objects.requireNonNull(getCommand("debugdata")).setExecutor(new DebugDataCommand());
         Objects.requireNonNull(getCommand("recipeannouncement")).setExecutor(new RecipeAnnouncementCommand());
         Objects.requireNonNull(getCommand("recipeannouncement")).setTabCompleter(new RecipeAnnouncementTab());
@@ -82,6 +81,7 @@ public final class Main extends JavaPlugin{
         Objects.requireNonNull(getCommand("help")).setTabCompleter(new HELPTab());
         Objects.requireNonNull(getCommand("prefix")).setExecutor(new PrefixCommand());
         Objects.requireNonNull(getCommand("prefix")).setTabCompleter(new PrefixTab());
+
 
 
         getServer().getPluginManager().registerEvents(new ItemEventHandler(), this);
