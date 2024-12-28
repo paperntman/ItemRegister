@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.jetbrains.annotations.NotNull;
 import org.sudaping.itemevent.Archive;
 import org.sudaping.itemevent.CustomRecipe;
@@ -55,7 +56,7 @@ public class CustomRecipeCommand implements CommandExecutor{
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (args.length == 0 || !List.of("add", "remove", "view", "reload").contains(args[0])){
+        if (args.length == 0 || !List.of("add", "remove", "view", "reload", "get").contains(args[0])){
             sender.sendMessage(Component.text("명령어를 입력해 주세요!", NamedTextColor.RED));
             return true;
         }
@@ -93,8 +94,9 @@ public class CustomRecipeCommand implements CommandExecutor{
                 return true;
             }
             if (CustomRecipe.recipes.stream().anyMatch(recipe -> recipe.getKey().getKey().equals(args[1]))){
-                sender.sendMessage(Component.text("이미 존재하는 레시피 네임스페이스입니다!", NamedTextColor.RED));
-                return true;
+                String[] argsCopy = args.clone();
+                argsCopy[0] = "remove";
+                remove(argsCopy, null);
             }
             add(args, player);
             player.sendMessage(Component.text("레시피 ", NamedTextColor.GREEN)
@@ -103,8 +105,25 @@ public class CustomRecipeCommand implements CommandExecutor{
                     .append(Component.text(" [레시피 보기]", NamedTextColor.GOLD).clickEvent(ClickEvent.runCommand("/cr view "+args[1]))));
         } else if(args[0].equals("remove")){
             remove(args, player);
+        } else if(args[0].equals("get")){
+            get(args, player);
         }
         return true;
+    }
+
+    private void get(@NotNull String[] args, Player player) {
+        NamespacedKey namespacedKey = new NamespacedKey(Main.plugin, args[1]);
+        AtomicBoolean found = new AtomicBoolean(false);
+        CustomRecipe.recipes.stream().filter(a -> a.getKey().equals(namespacedKey)).findFirst().ifPresent(recipe -> {
+            found.set(true);
+            for (int i = 0; i < recipe.getIngredients().size(); i++) {
+                player.getInventory().setItem(i, recipe.getIngredients().get(i));
+            }
+            player.getInventory().setItemInOffHand(recipe.getResult());
+        });
+        if (!found.get()) {
+            player.sendMessage(Component.text("존재하지 않는 레시피 네임스페이스입니다!", NamedTextColor.RED));
+        }
     }
 
     private void view(@NotNull String[] args, Player player) {
@@ -143,10 +162,12 @@ public class CustomRecipeCommand implements CommandExecutor{
         NamespacedKey namespacedKey = new NamespacedKey(Main.plugin, args[1]);
 
         boolean b = Bukkit.removeRecipe(namespacedKey);
-        if (!b){
-            player.sendMessage(Component.text("존재하지 않는 레시피 네임스페이스입니다!", NamedTextColor.RED));
-        }else {
-            player.sendMessage(Component.text("레시피를 성공적으로 삭제했습니다!", NamedTextColor.GREEN));
+        if (player != null){
+            if (!b){
+                player.sendMessage(Component.text("존재하지 않는 레시피 네임스페이스입니다!", NamedTextColor.RED));
+            }else {
+                player.sendMessage(Component.text("레시피를 성공적으로 삭제했습니다!", NamedTextColor.GREEN));
+            }
         }
 
         CustomRecipe.recipes.removeIf(a -> a.getKey().equals(namespacedKey));

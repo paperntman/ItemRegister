@@ -24,15 +24,16 @@ public class CustomRecipeTab implements TabCompleter{
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         switch (args.length) {
             case 1:{
-                return Stream.of("add", "remove", "view", "reload").filter(s -> s.startsWith(args[0])).collect(Collectors.toList());
+                return Stream.of("add", "remove", "view", "reload", "get").filter(s -> s.startsWith(args[0])).collect(Collectors.toList());
             }
             case 2:{
-                if (args[0].equalsIgnoreCase("remove") || args[0].equalsIgnoreCase("view")){
+                if (args[0].equalsIgnoreCase("remove") || args[0].equalsIgnoreCase("view") || args[0].equalsIgnoreCase("get")){
                     File file = new File(Main.dataFolder + File.separator + "recipes");
                     if (!file.exists()) return List.of();
                     String[] list = file.list();
                     if (list == null) return List.of();
                     return Arrays.stream(list).filter(s -> {
+                        if (sender.isOp()) return true;
                         CustomRecipe recipe = CustomRecipe.getCustomRecipeByKey(s);
                         if (recipe == null) return false;
                         Component component = recipe.getResult().getItemMeta().displayName();
@@ -40,7 +41,6 @@ public class CustomRecipeTab implements TabCompleter{
                         return !CustomRecipeCommand.json.get("blocked").getAsJsonArray().contains(
                                 new JsonPrimitive(textComponent.content())
                         );
-
                     }).filter(e -> e.startsWith(args[1])).toList();
                 }
             }
