@@ -11,13 +11,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.Recipe;
 import org.sudaping.itemevent.Archive;
+import org.sudaping.itemevent.Prefix;
 import org.sudaping.itemevent.commands.RecipeAnnouncementCommand;
 
 public class ItemCraftListener implements Listener {
     private static final Archive archive = Archive.load(ItemCraftListener.class);
     @EventHandler
     public void onCraft(CraftItemEvent event){
-        if (RecipeAnnouncementCommand.keys.stream().map(Bukkit::getRecipe).anyMatch(r -> {
+        if (RecipeAnnouncementCommand.keys.keySet().stream().map(Bukkit::getRecipe).anyMatch(r -> {
             if (r == null) return false;
             return recipesEquals(event.getRecipe(), r);
         })) {
@@ -46,9 +47,15 @@ public class ItemCraftListener implements Listener {
                     jsonObject.add(key, new JsonArray());
                     jsonObject.get(key).getAsJsonArray().add(p.getUniqueId().toString());
                 }
+
+                String prefix = RecipeAnnouncementCommand.keys.get(((Keyed) event.getRecipe()).getKey());
+                boolean given = Prefix.givePrefix(p.getUniqueId(), prefix);
+
+                if (given) p.sendMessage(Component.text("칭호 ")
+                        .append(Prefix.getPrefixMap().get(prefix))
+                        .append(Component.text("를 획득했습니다!")));
                 if(!announce) return;
                 archive.write(jsonObject.toString());
-
                 Bukkit.getServer().broadcast(Component.selector(p.getName())
                         .append(Component.text(" 플레이어가 "))
                         .append(event.getRecipe().getResult().displayName())
