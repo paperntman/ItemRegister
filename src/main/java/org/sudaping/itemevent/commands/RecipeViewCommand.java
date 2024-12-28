@@ -43,8 +43,7 @@ public class RecipeViewCommand implements @Nullable CommandExecutor {
                 return false;
             }
             String name = String.join(" ", args);
-            CustomRecipe target = null;
-            target = getCustomRecipeByName(name, target);
+            CustomRecipe target = getCustomRecipeByName(name);
             if (target == null){
                 sender.sendMessage(Component.text("존재하지 않는 레시피입니다!", NamedTextColor.RED));
                 return true;

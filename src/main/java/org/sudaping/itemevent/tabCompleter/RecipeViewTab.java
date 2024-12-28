@@ -1,5 +1,6 @@
 package org.sudaping.itemevent.tabCompleter;
 
+import com.google.gson.JsonPrimitive;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
@@ -12,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sudaping.itemevent.CustomRecipe;
+import org.sudaping.itemevent.commands.CustomRecipeCommand;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +31,7 @@ public class RecipeViewTab implements TabCompleter {
                 if (itemMeta == null) continue;
                 Component component = itemMeta.displayName();
                 if (component == null) continue;
-                if (component instanceof TextComponent textComponent)
+                if (component instanceof TextComponent textComponent && !CustomRecipeCommand.json.get("blocked").getAsJsonArray().contains(new JsonPrimitive(textComponent.content())))
                     completions.add(textComponent.content());
             }
         }

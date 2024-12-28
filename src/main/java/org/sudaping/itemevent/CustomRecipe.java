@@ -9,6 +9,7 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,7 +80,8 @@ public class CustomRecipe {
         Main.compressGzipFile(new File(recipeFolder.getAbsolutePath() + File.separator +"result.gz"), result);
     }
 
-    public static CustomRecipe getCustomRecipeByName(String name, CustomRecipe target) {
+    @Nullable
+    public static CustomRecipe getCustomRecipeByName(String name) {
         for (CustomRecipe recipe : CustomRecipe.recipes) {
             ItemStack result = recipe.getResult();
             ItemMeta itemMeta = result.getItemMeta();
@@ -87,10 +89,22 @@ public class CustomRecipe {
             Component component = itemMeta.displayName();
             if (!(component instanceof TextComponent textComponent)) continue;
             if (textComponent.content().equalsIgnoreCase(name)) {
-                target = recipe;
+                return recipe;
             }
         }
-        return target;
+        return null;
+    }
+
+    @Nullable
+    public static CustomRecipe getCustomRecipeByKey(String key) {
+        NamespacedKey namespacedKey = new NamespacedKey(Main.plugin, key);
+        CustomRecipe target = null;
+        for (CustomRecipe recipe : CustomRecipe.recipes) {
+            if (recipe.getKey().equals(namespacedKey)) {
+                return target;
+            }
+        }
+        return null;
     }
 
     public static CustomRecipe load(String key) {

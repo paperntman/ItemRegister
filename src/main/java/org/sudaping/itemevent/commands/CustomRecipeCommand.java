@@ -1,6 +1,11 @@
 package org.sudaping.itemevent.commands;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -15,6 +20,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.sudaping.itemevent.Archive;
 import org.sudaping.itemevent.CustomRecipe;
 import org.sudaping.itemevent.Main;
 
@@ -26,6 +32,9 @@ import java.util.stream.IntStream;
 
 public class CustomRecipeCommand implements CommandExecutor{
 
+    private static final Archive archive = Archive.load(CustomRecipeCommand.class);
+    public static JsonObject json = new JsonObject();
+
     public CustomRecipeCommand() {
         File dir = new File(Main.plugin.getDataFolder(), "recipes");
         String[] list = dir.list();
@@ -36,12 +45,22 @@ public class CustomRecipeCommand implements CommandExecutor{
                 Bukkit.addRecipe(load.getRecipe());
             }
         }
+        String read = archive.read();
+        if (read.isEmpty()) {
+            json = new JsonObject();
+            json.add("blocked", new JsonArray());
+            archive.write(json.toString());
+        }else json = JsonParser.parseString(read).getAsJsonObject();
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (args.length == 0 || !List.of("add", "remove", "view").contains(args[0])){
+        if (args.length == 0 || !List.of("add", "remove", "view", "reload").contains(args[0])){
             sender.sendMessage(Component.text("명령어를 입력해 주세요!", NamedTextColor.RED));
+            return true;
+        }
+        if(args[0].equals("reload") && sender.isOp()){
+            json = JsonParser.parseString(archive.read()).getAsJsonObject();
             return true;
         }
         if (args.length == 1){
@@ -91,8 +110,15 @@ public class CustomRecipeCommand implements CommandExecutor{
     private void view(@NotNull String[] args, Player player) {
         Inventory inventory = Bukkit.createInventory(null, InventoryType.WORKBENCH, Component.text("DEBUG", NamedTextColor.GOLD));
         NamespacedKey namespacedKey = new NamespacedKey(Main.plugin, args[1]);
-        AtomicBoolean present = new AtomicBoolean(false);
+        AtomicBoolean none = new AtomicBoolean(true);
+        AtomicBoolean blocked = new AtomicBoolean(false);
         CustomRecipe.recipes.stream().filter(a -> a.getKey().equals(namespacedKey)).findFirst().ifPresent(recipe -> {
+            Component component = recipe.getResult().getItemMeta().displayName();
+            if (component != null && json.get("blocked").getAsJsonArray().contains(new JsonPrimitive(((TextComponent) component).content()))
+            && !player.isOp()){
+                blocked.set(true);
+                return;
+            }
             ItemStack[] array = recipe.getIngredients().toArray(new ItemStack[9]);
 
             // 새로운 배열 생성
@@ -101,11 +127,14 @@ public class CustomRecipeCommand implements CommandExecutor{
             System.arraycopy(array, 0, newArray, 1, array.length);
 
             inventory.setContents(newArray);
-            present.set(true);
-        });
-        if(present.get()){
             player.openInventory(inventory);
-        }else {
+            none.set(false);
+        });
+        if (blocked.get()){
+            player.sendMessage(Component.text("볼 수 없는 레시피 네임스페이스입니다!", NamedTextColor.RED));
+            return;
+        }
+        if(none.get()){
             player.sendMessage(Component.text("존재하지 않는 레시피 네임스페이스입니다!", NamedTextColor.RED));
         }
     }
