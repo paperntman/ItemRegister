@@ -8,6 +8,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.inventory.Recipe;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.sudaping.itemevent.Prefix;
 import org.sudaping.itemevent.commands.RecipeAnnouncementCommand;
 
 import java.util.ArrayList;
@@ -19,27 +20,35 @@ import java.util.stream.Stream;
 public class RecipeAnnouncementTab implements TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        List<String> completions = new ArrayList<>();
+
         switch (args.length) {
-            case 1: {
-                return Stream.of("add", "remove", "list").filter(s -> s.startsWith(args[0])).collect(Collectors.toList());
+            case 1 -> {
+                completions.addAll(List.of("add", "remove", "list"));
             }
-            case 2: {
-                if(args[0].equalsIgnoreCase("add")){
+            case 2 -> {
+                if (args[0].equalsIgnoreCase("add")) {
                     Iterator<Recipe> recipeIterator = sender.getServer().recipeIterator();
-                    List<String> ret = new ArrayList<>();
                     while (recipeIterator.hasNext()) {
                         Recipe recipe = recipeIterator.next();
                         if (recipe instanceof Keyed keyed) {
                             NamespacedKey key = keyed.getKey();
-                            if ((key.toString().startsWith(args[1]))&& !RecipeAnnouncementCommand.keys.contains(key)) ret.add(key.toString());
+                            if (!RecipeAnnouncementCommand.keys.containsKey(key)) {
+                                completions.add(key.toString());
+                            }
                         }
                     }
-                    return ret;
-                }else if(args[0].equalsIgnoreCase("remove")){
-                    return RecipeAnnouncementCommand.keys.stream().map(NamespacedKey::toString).filter(s -> s.startsWith(args[1])).collect(Collectors.toList());
+                } else if (args[0].equalsIgnoreCase("remove")) {
+                    completions.addAll(RecipeAnnouncementCommand.keys.keySet().stream().map(NamespacedKey::toString).toList());
+                }
+            }
+            case 3 -> {
+                if (args[0].equalsIgnoreCase("add")) {
+                    completions.addAll(Prefix.getPrefixMap().keySet());
                 }
             }
         }
-        return List.of();
+
+        return completions.stream().filter(s -> s.startsWith(args[args.length - 1])).sorted().collect(Collectors.toList());
     }
 }

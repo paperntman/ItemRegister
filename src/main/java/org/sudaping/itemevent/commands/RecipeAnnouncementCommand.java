@@ -10,9 +10,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.sudaping.itemevent.Archive;
+import org.sudaping.itemevent.Prefix;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -20,20 +23,23 @@ import java.util.stream.Collectors;
 public class RecipeAnnouncementCommand implements CommandExecutor {
 
     private final Archive archive = Archive.load(RecipeAnnouncementCommand.class);
-    public static final List<NamespacedKey> keys = new ArrayList<>();
+    public static final Map<NamespacedKey, String> keys = new HashMap<>();
 
     public RecipeAnnouncementCommand() {
         String read = archive.read();
         for (String s : read.split("\n")) {
-            NamespacedKey e = NamespacedKey.fromString(s);
+            String[] split = s.split(" ");
+            NamespacedKey e = NamespacedKey.fromString(split[0]);
             if (e != null) {
-                keys.add(e);
+                keys.put(e, split[1]);
             }
         }
     }
 
     private void save(){
-        archive.write(keys.stream().map(NamespacedKey::toString).collect(Collectors.joining("\n")));
+        archive.write(keys.entrySet().stream()
+                .map(namespacedKeyStringEntry -> namespacedKeyStringEntry.getKey() + " " + namespacedKeyStringEntry.getValue())
+                .collect(Collectors.joining("\n")));
     }
 
     @Override
@@ -65,11 +71,15 @@ public class RecipeAnnouncementCommand implements CommandExecutor {
                     sender.sendMessage(Component.text("존재하지 않는 레시피 네임스페이스입니다!", NamedTextColor.RED));
                     return true;
                 }
-                if(keys.contains(key)){
+                if(keys.containsKey(key)){
                     sender.sendMessage(Component.text("이미 등록된 레시피 네임스페이스입니다!", NamedTextColor.RED));
                     return true;
                 }
-                keys.add(key);
+                String prefix;
+                if (args.length == 2){
+                    prefix = "";
+                }else prefix = args[2];
+                keys.put(key, prefix);
                 sender.sendMessage(Component.text("레시피 알림에 ", NamedTextColor.GREEN)
                         .append(Component.text( key.toString(), NamedTextColor.WHITE, TextDecoration.BOLD))
                         .append(Component.text(" 가 성공적으로 추가되었습니다!")));
@@ -81,11 +91,11 @@ public class RecipeAnnouncementCommand implements CommandExecutor {
                     sender.sendMessage(Component.text("네임스페이스를 입력해 주세요!", NamedTextColor.RED));
                     return true;
                 }
-                if (keys.stream().map(NamespacedKey::toString).noneMatch(e -> e.equalsIgnoreCase(args[1]))){
+                if (keys.keySet().stream().map(NamespacedKey::toString).noneMatch(e -> e.equalsIgnoreCase(args[1]))){
                     sender.sendMessage(Component.text("존재하지 않는 레시피 네임스페이스입니다!", NamedTextColor.RED));
                     return true;
                 }
-                keys.removeIf(namespacedKey -> namespacedKey.toString().equalsIgnoreCase(args[1]));
+                keys.remove(NamespacedKey.fromString(args[1]));
                 sender.sendMessage(Component.text("레시피 알림에서", NamedTextColor.GREEN)
                         .append(Component.text( key.toString(), NamedTextColor.WHITE, TextDecoration.BOLD))
                         .append(Component.text(" 가 성공적으로 제거되었습니다!")));
@@ -100,7 +110,7 @@ public class RecipeAnnouncementCommand implements CommandExecutor {
                 else{
                     component = Component.text("현재 알림 설정된 레시피 네임스페이스 알림 목록입니다.");
                 }
-                for (NamespacedKey namespacedKey : keys) {
+                for (NamespacedKey namespacedKey : keys.keySet()) {
                     component = component.append(Component.text("\n")).append(Component.text(namespacedKey.toString()));
                 }
                 sender.sendMessage(component);
