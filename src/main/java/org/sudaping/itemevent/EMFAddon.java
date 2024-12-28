@@ -1,6 +1,7 @@
 package org.sudaping.itemevent;
 import com.oheers.fish.api.reward.EMFRewardsLoadEvent;
 import com.oheers.fish.api.reward.RewardType;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,8 +22,11 @@ public class EMFAddon implements RewardType, Listener {
 
     @Override
     public void doReward(@NotNull Player player, @NotNull String key, @NotNull String value, Location location) {
-        Prefix.givePrefix(player.getUniqueId(), value);
+        boolean given = Prefix.givePrefix(player.getUniqueId(), value);
         Main.logger.info("gave prefix "+value+" to "+player.getUniqueId());
+        if (given) player.sendMessage(Component.text("칭호 ")
+                .append(Prefix.getPrefixMap().get(value))
+                .append(Component.text("를 획득했습니다!")));
     }
 
     @Override
