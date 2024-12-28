@@ -14,6 +14,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sudaping.itemevent.Main;
+import org.sudaping.itemevent.Prefix;
 import org.sudaping.itemevent.commands.CustomInventoryCommand;
 
 import java.io.File;
@@ -39,7 +40,7 @@ public class PersistentDataTab implements TabCompleter {
             }
         }
         if (args.length == 2 && args[0].equals("set")) {
-            completions.addAll(List.of("structure", "biome", "inventory", "message", "command"));
+            completions.addAll(List.of("structure", "biome", "inventory", "message", "command", "prefix"));
        }
         if (args.length == 3 && args[0].equals("set") && args[1].equals("structure")) {
             completions.addAll(Registry.STRUCTURE.stream().map(a -> a.key().value()).toList());
@@ -59,6 +60,9 @@ public class PersistentDataTab implements TabCompleter {
             if (list != null) {
                 completions.addAll(Arrays.stream(list).map(File::getName).map(s -> "\\f"+s).toList());
             }
+        }
+        if (args.length == 3 && args[0].equals("set") && args[1].equals("prefix")) {
+            completions.addAll(Prefix.getPrefixMap().keySet());
         }
         if (args.length > 3 && args[0].equals("set") && args[1].equals("command")) {
             String trim = Arrays.stream(args).skip(3).collect(Collectors.joining(" "));

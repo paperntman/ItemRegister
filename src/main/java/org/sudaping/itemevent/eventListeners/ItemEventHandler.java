@@ -10,6 +10,7 @@ import org.sudaping.itemevent.ItemEventListener;
 import org.sudaping.itemevent.commands.ItemEventCommand;
 import org.sudaping.itemevent.itemListeners.Fly5m;
 import org.sudaping.itemevent.itemListeners.Locate;
+import org.sudaping.itemevent.itemListeners.PrefixItemEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +23,7 @@ public class ItemEventHandler implements Listener {
     public ItemEventHandler() {
         map.put("fly5m", new Fly5m());
         map.put("locate", new Locate());
+        map.put("prefix", new PrefixItemEvent());
     }
 
     @EventHandler
