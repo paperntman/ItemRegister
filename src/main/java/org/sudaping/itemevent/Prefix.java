@@ -102,18 +102,28 @@ public class Prefix {
         return listElement.getAsJsonArray();
     }
 
-    public static void givePrefix(UUID uuid, String key) {
+    public static boolean givePrefix(UUID uuid, String key) {
         JsonObject dataElement = getOrCreatePlayerData(uuid);
         JsonArray listElement = getOrCreateList(dataElement);
-        listElement.add(key);
+        if (listElement.contains(new JsonPrimitive(key))){
+            return false;
+        }else{
+            listElement.add(key);
+        }
         save();
+        return true;
     }
 
-    public static void takePrefix(UUID uuid, String key) {
+    public static boolean takePrefix(UUID uuid, String key) {
         JsonObject dataElement = getOrCreatePlayerData(uuid);
         JsonArray listElement = getOrCreateList(dataElement);
-        listElement.remove(new JsonPrimitive(key));
+        if (listElement.contains(new JsonPrimitive(key))){
+            listElement.remove(new JsonPrimitive(key));
+        }else{
+            return false;
+        }
         save();
+        return true;
     }
 
     public static void setPrefix(UUID uuid, String key) {

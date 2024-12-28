@@ -21,7 +21,6 @@ public class EMFAddon implements RewardType, Listener {
 
     @Override
     public void doReward(@NotNull Player player, @NotNull String key, @NotNull String value, Location location) {
-        System.out.println("fking?");
         Prefix.givePrefix(player.getUniqueId(), value);
         Main.logger.info("gave prefix "+value+" to "+player.getUniqueId());
     }
