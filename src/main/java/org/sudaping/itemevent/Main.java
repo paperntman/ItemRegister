@@ -94,6 +94,7 @@ public final class Main extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new CustomInventoryListener(), this);
         getServer().getPluginManager().registerEvents(new CustomInventoryCommandMoveListener(), this);
         getServer().getPluginManager().registerEvents(new EMFAddon(), this);
+        getServer().getPluginManager().registerEvents(new PrefixItemListener(), this);
 
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, Fly::save, 0, 20);

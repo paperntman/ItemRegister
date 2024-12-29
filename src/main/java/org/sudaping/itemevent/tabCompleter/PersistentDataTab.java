@@ -40,7 +40,7 @@ public class PersistentDataTab implements TabCompleter {
             }
         }
         if (args.length == 2 && args[0].equals("set")) {
-            completions.addAll(List.of("structure", "biome", "inventory", "message", "command", "prefix"));
+            completions.addAll(List.of("structure", "biome", "inventory", "message", "command", "prefix", "required", "itemcommand"));
        }
         if (args.length == 3 && args[0].equals("set") && args[1].equals("structure")) {
             completions.addAll(Registry.STRUCTURE.stream().map(a -> a.key().value()).toList());
@@ -61,12 +61,18 @@ public class PersistentDataTab implements TabCompleter {
                 completions.addAll(Arrays.stream(list).map(File::getName).map(s -> "\\f"+s).toList());
             }
         }
-        if (args.length == 3 && args[0].equals("set") && args[1].equals("prefix")) {
+        if (args.length == 3 && args[0].equals("set") && (args[1].equals("prefix")  || args[1].equals("required"))) {
             completions.addAll(Prefix.getPrefixMap().keySet());
         }
-        if (args.length > 3 && args[0].equals("set") && args[1].equals("command")) {
+        if ((args.length > 3 && args[0].equals("set") && args[1].equals("command"))) {
             String trim = Arrays.stream(args).skip(3).collect(Collectors.joining(" "));
-            System.out.println(trim);
+            List<String> c = Bukkit.getCommandMap().tabComplete(sender, trim);
+            if (c == null) c = new ArrayList<>();
+            else c = c.stream().map(s -> s.replaceFirst("/", "")).toList();
+            completions.addAll(c);
+        }
+        if (args.length > 2 && args[0].equals("set") && args[1].equals("itemcommand")){
+            String trim = Arrays.stream(args).skip(2).collect(Collectors.joining(" "));
             List<String> c = Bukkit.getCommandMap().tabComplete(sender, trim);
             if (c == null) c = new ArrayList<>();
             else c = c.stream().map(s -> s.replaceFirst("/", "")).toList();
