@@ -18,7 +18,7 @@ import org.bukkit.util.StructureSearchResult;
 import org.jetbrains.annotations.NotNull;
 import org.sudaping.itemevent.Main;
 
-public class Locate implements org.sudaping.itemevent.ItemEventListener {
+public class LocateItem implements org.sudaping.itemevent.ItemEventListener {
     @Override
     public void onEvent(@NotNull PlayerInteractEvent event) {
         Player player = event.getPlayer();

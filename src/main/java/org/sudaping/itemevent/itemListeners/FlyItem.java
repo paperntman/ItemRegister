@@ -11,7 +11,7 @@ import org.sudaping.itemevent.Archive;
 import org.sudaping.itemevent.ItemEventListener;
 import org.sudaping.itemevent.runnables.Fly;
 
-public class Fly5m implements ItemEventListener {
+public class FlyItem implements ItemEventListener {
 
     public static final Archive archive = Archive.load(Fly.class);
 
