@@ -13,9 +13,9 @@ import java.util.stream.Stream;
 public class ItemEventTab implements @Nullable TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        return switch (args.length) {
-            case 1 -> Stream.of("death", "fly5m", "locate", "prefix").filter(s -> s.startsWith(args[0])).collect(Collectors.toList());
-            default -> null;
-        };
+        if (args.length == 1) {
+            return Stream.of("death", "fly5m", "locate", "prefix", "itemcommand").filter(s -> s.startsWith(args[0])).collect(Collectors.toList());
+        }
+        return null;
     }
 }
