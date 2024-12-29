@@ -77,8 +77,10 @@ public class RecipeAnnouncementCommand implements CommandExecutor {
                 }
                 String prefix;
                 if (args.length == 2){
-                    prefix = "";
-                }else prefix = args[2];
+                    sender.sendMessage(Component.text("칭호를 입력해 주세요!", NamedTextColor.RED));
+                    return true;
+                }
+                prefix = args[2];
                 keys.put(key, prefix);
                 sender.sendMessage(Component.text("레시피 알림에 ", NamedTextColor.GREEN)
                         .append(Component.text( key.toString(), NamedTextColor.WHITE, TextDecoration.BOLD))
