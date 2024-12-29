@@ -8,9 +8,9 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.sudaping.itemevent.ItemEventListener;
 import org.sudaping.itemevent.commands.ItemEventCommand;
-import org.sudaping.itemevent.itemListeners.Fly5m;
-import org.sudaping.itemevent.itemListeners.Locate;
-import org.sudaping.itemevent.itemListeners.PrefixItemEvent;
+import org.sudaping.itemevent.itemListeners.CommandItem;
+import org.sudaping.itemevent.itemListeners.FlyItem;
+import org.sudaping.itemevent.itemListeners.LocateItem;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,9 +21,9 @@ public class ItemEventHandler implements Listener {
 
 
     public ItemEventHandler() {
-        map.put("fly5m", new Fly5m());
-        map.put("locate", new Locate());
-        map.put("prefix", new PrefixItemEvent());
+        map.put("fly5m", new FlyItem());
+        map.put("locate", new LocateItem());
+        map.put("itemcommand", new CommandItem());
     }
 
     @EventHandler
