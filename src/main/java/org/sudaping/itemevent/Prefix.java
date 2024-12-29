@@ -74,6 +74,12 @@ public class Prefix {
                 jsonArray.remove(jsonElement);
             }
         }
+        JsonObject playerData = jsonObject.get("playerData").getAsJsonObject();
+        playerData.asMap().forEach((k, v) -> {
+            JsonObject data = v.getAsJsonObject();
+            data.get("list").getAsJsonArray().remove(new JsonPrimitive(key));
+            if (data.get("current").getAsString().equals(key)) data.add("current", new JsonPrimitive("null"));
+        });
         save();
     }
 
@@ -137,7 +143,7 @@ public class Prefix {
         Bukkit.getOnlinePlayers().forEach(player -> {
             JsonObject playerData = getOrCreatePlayerData(player.getUniqueId());
             JsonElement jsonElement = playerData.get("current");
-            if (jsonElement.isJsonNull()){
+            if (jsonElement.getAsString().equals("null")){
                 player.displayName(Component.text(player.getName()));
                 player.playerListName(player.displayName());
             }else{
