@@ -15,12 +15,15 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+    maven { url "https://maven.enginehub.org/repo/" }
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     implementation 'com.github.Oheers.EvenMoreFish:even-more-fish-api:v1.7.4-SNAPSHOT-26-11-2024'
+    compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.9'
+    implementation 'com.github.sk89q:Worldedit:7.2.4'
 }
 
 def targetJavaVersion = 17

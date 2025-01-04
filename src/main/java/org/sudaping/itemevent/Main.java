@@ -4,10 +4,32 @@ import org.bukkit.Bukkit;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.sudaping.itemevent.commands.*;
+import org.sudaping.itemevent.ci.CustomInventoryCommand;
+import org.sudaping.itemevent.ci.CustomInventoryCommandMoveListener;
+import org.sudaping.itemevent.ci.CustomInventoryListener;
+import org.sudaping.itemevent.ci.CustomInventoryTab;
+import org.sudaping.itemevent.cr.CustomRecipeCommand;
+import org.sudaping.itemevent.cr.CustomRecipeTab;
+import org.sudaping.itemevent.cr.DebugInventoryListener;
+import org.sudaping.itemevent.cr.RecipeListener;
+import org.sudaping.itemevent.cr.crv.RecipeViewCommand;
+import org.sudaping.itemevent.cr.crv.RecipeViewTab;
+import org.sudaping.itemevent.db.DebugDataCommand;
 import org.sudaping.itemevent.eventListeners.*;
-import org.sudaping.itemevent.runnables.Fly;
-import org.sudaping.itemevent.tabCompleter.*;
+import org.sudaping.itemevent.help.HELPTab;
+import org.sudaping.itemevent.pd.PersistentDataTab;
+import org.sudaping.itemevent.pd.item.*;
+import org.sudaping.itemevent.fly.FlyCommand;
+import org.sudaping.itemevent.help.HelpCommand;
+import org.sudaping.itemevent.pd.PersistentDataCommand;
+import org.sudaping.itemevent.prefix.PrefixCommand;
+import org.sudaping.itemevent.prefix.PrefixGetEvent;
+import org.sudaping.itemevent.prefix.PrefixInventoryListener;
+import org.sudaping.itemevent.prefix.PrefixTab;
+import org.sudaping.itemevent.ra.ItemCraftListener;
+import org.sudaping.itemevent.ra.RecipeAnnouncementCommand;
+import org.sudaping.itemevent.ra.RecipeAnnouncementTab;
+import org.sudaping.itemevent.fly.Fly;
 
 import java.io.*;
 import java.util.Objects;
@@ -56,6 +78,42 @@ public final class Main extends JavaPlugin{
         return null;
     }
 
+    public static byte[] decompressGzipBytes(byte[] compressedData) {
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(compressedData);
+             GZIPInputStream gzis = new GZIPInputStream(bais);
+             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+
+            byte[] buffer = new byte[1024];
+            int len;
+
+            // GZIP 데이터에서 읽고 압축 해제
+            while ((len = gzis.read(buffer)) != -1) {
+                baos.write(buffer, 0, len);
+            }
+
+            return baos.toByteArray(); // 압축 해제된 바이트 배열 반환
+        } catch (IOException e) {
+            logger.severe("IO error: " + e.getMessage());
+        }
+        return null; // 예외 발생 시 null 반환
+    }
+
+    public static byte[] compressGzipBytes(ItemStack itemStack) {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+             GZIPOutputStream gzos = new GZIPOutputStream(baos)) {
+
+            gzos.write(itemStack.serializeAsBytes());
+            gzos.finish(); // 압축 스트림을 마무리합니다.
+
+            return baos.toByteArray(); // 압축된 바이트 배열 반환
+        } catch (IOException e) {
+            logger.severe("IO error: " + e.getMessage());
+        }
+        return null; // 예외 발생 시 null 반환
+    }
+
+
+
     @Override
     public void onEnable() {
         dataFolder = getDataFolder();
@@ -63,8 +121,6 @@ public final class Main extends JavaPlugin{
         logger = JavaPlugin.getPlugin(Main.class).getLogger();
         plugin = this;
 
-        Objects.requireNonNull(getCommand("itemevent")).setExecutor(new ItemEventCommand());
-        Objects.requireNonNull(getCommand("itemevent")).setTabCompleter(new ItemEventTab());
         Objects.requireNonNull(getCommand("customrecipe")).setExecutor(new CustomRecipeCommand());
         Objects.requireNonNull(getCommand("customrecipe")).setTabCompleter(new CustomRecipeTab());
         Objects.requireNonNull(getCommand("debugdata")).setExecutor(new DebugDataCommand());
@@ -84,17 +140,21 @@ public final class Main extends JavaPlugin{
 
 
 
-        getServer().getPluginManager().registerEvents(new ItemEventHandler(), this);
-        getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
-        getServer().getPluginManager().registerEvents(new RecipeListener(), this);
-        getServer().getPluginManager().registerEvents(new DebugInventoryListener(), this);
         getServer().getPluginManager().registerEvents(new AnvilListener(), this);
-        getServer().getPluginManager().registerEvents(new ItemCraftListener(), this);
-        getServer().getPluginManager().registerEvents(new PrefixInventoryListener(), this);
-        getServer().getPluginManager().registerEvents(new CustomInventoryListener(), this);
+        getServer().getPluginManager().registerEvents(new CommandItem(), this);
         getServer().getPluginManager().registerEvents(new CustomInventoryCommandMoveListener(), this);
+        getServer().getPluginManager().registerEvents(new CustomInventoryListener(), this);
+        getServer().getPluginManager().registerEvents(new DebugInventoryListener(), this);
         getServer().getPluginManager().registerEvents(new EMFAddon(), this);
+        getServer().getPluginManager().registerEvents(new FlyItem(), this);
+        getServer().getPluginManager().registerEvents(new ItemCraftListener(), this);
+        getServer().getPluginManager().registerEvents(new LocateItem(), this);
+        getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
+        getServer().getPluginManager().registerEvents(new PrefixGetEvent(), this);
+        getServer().getPluginManager().registerEvents(new PrefixInventoryListener(), this);
         getServer().getPluginManager().registerEvents(new PrefixItemListener(), this);
+        getServer().getPluginManager().registerEvents(new RecipeListener(), this);
+
 
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, Fly::save, 0, 20);

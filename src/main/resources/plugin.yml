@@ -2,7 +2,6 @@ name: itemRegister
 version: '0.6'
 main: org.sudaping.itemevent.Main
 api-version: '1.20'
-
 commands:
   itemevent:
     description: "TODO"

@@ -42,6 +42,7 @@ public class Archive {
             while (line != null) {
                 sb.append(line);
                 line = br.readLine();
+                sb.append("\n");
             }
             return sb.toString();
         } catch (FileNotFoundException e){

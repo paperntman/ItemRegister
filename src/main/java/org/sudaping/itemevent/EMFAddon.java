@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.sudaping.itemevent.prefix.Prefix;
 
 public class EMFAddon implements RewardType, Listener {
 
