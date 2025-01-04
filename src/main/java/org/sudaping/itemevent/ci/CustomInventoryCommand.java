@@ -38,7 +38,7 @@ public class CustomInventoryCommand implements CommandExecutor {
         }
         switch (args[0]) {
             case "create" -> create(sender, args);
-            case "list" -> list(sender, args);
+            case "list" -> list(sender);
             case "remove" -> remove(sender, args);
             case "modify" -> modify(sender, args);
             case "view" -> view(sender, args);
@@ -77,7 +77,7 @@ public class CustomInventoryCommand implements CommandExecutor {
         sender.sendMessage(Component.text(name+"의 이름을 가진 인벤토리를 제작했습니다!"));
     }
 
-    private void list(CommandSender sender, String[] args) {
+    private void list(CommandSender sender) {
         sender.sendMessage(inventoryMap.keySet().toString());
     }
 
@@ -120,9 +120,10 @@ public class CustomInventoryCommand implements CommandExecutor {
             @Nullable ItemStack[] contents = inventory.getContents();
             for (int i = 0; i < contents.length; i++) {
                 File target = new File(parent.getAbsolutePath() + File.separator + i);
-                if(contents[i] == null) continue;
-                if(contents[i].getType().equals(Material.AIR)) continue;
-                Main.compressGzipFile(target, contents[i]);
+                ItemStack content = contents[i];
+                if(content == null) continue;
+                if(content.getType().equals(Material.AIR)) continue;
+                Main.compressGzipFile(target, content);
             }
         }
     }
@@ -136,8 +137,8 @@ public class CustomInventoryCommand implements CommandExecutor {
             File[] children = file.listFiles();
             ItemStack[] contents = new ItemStack[54];
             if(children == null) continue;
-            for (int i = 0; i < children.length; i++) {
-                contents[Integer.parseInt(children[i].getName())] = ItemStack.deserializeBytes(Main.decompressGzipFile(children[i].getAbsolutePath()));
+            for (File child : children) {
+                contents[Integer.parseInt(child.getName())] = ItemStack.deserializeBytes(Main.decompressGzipFile(child.getAbsolutePath()));
             }
             Inventory inventory = Bukkit.createInventory(null, 54, Component.text("GUI", NamedTextColor.GOLD));
             inventory.setContents(contents);

@@ -26,10 +26,6 @@ public class PrefixEvent extends Event {
         return handlers;
     }
 
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
     public UUID getUuid() {
         return uuid;
     }

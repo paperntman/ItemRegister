@@ -15,6 +15,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.sudaping.itemevent.Main;
 
+import java.util.Objects;
+
 public class PrefixInventoryListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
@@ -34,16 +36,15 @@ public class PrefixInventoryListener implements Listener {
             return;
         }
         if (currentItem.getType() == Material.RED_WOOL) {
-            TextComponent component = (TextComponent) e.getClickedInventory().getItem(4).getItemMeta().displayName();
-            int page = Integer.parseInt(component.content().split(" ")[1]);
+            TextComponent component = (TextComponent) Objects.requireNonNull(e.getClickedInventory().getItem(4)).getItemMeta().displayName();
+            int page = Integer.parseInt(Objects.requireNonNull(component).content().split(" ")[1]);
             e.getWhoClicked().openInventory(PrefixInventory.getInventory((Player) e.getWhoClicked(), page-1));
             return;
         }
         if (currentItem.getType() == Material.GREEN_WOOL) {
-            TextComponent component = (TextComponent) e.getClickedInventory().getItem(4).getItemMeta().displayName();
-            int page = Integer.parseInt(component.content().split(" ")[1]);
+            TextComponent component = (TextComponent) Objects.requireNonNull(e.getClickedInventory().getItem(4)).getItemMeta().displayName();
+            int page = Integer.parseInt(Objects.requireNonNull(component).content().split(" ")[1]);
             e.getWhoClicked().openInventory(PrefixInventory.getInventory((Player) e.getWhoClicked(), page+1));
-            return;
         }
     }
 }

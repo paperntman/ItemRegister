@@ -78,33 +78,33 @@ public class CustomRecipeCommand implements CommandExecutor{
             sender.sendMessage(Component.text("권한이 없습니다!", NamedTextColor.RED));
             return true;
         }
-        if (args[0].equals("add")){
-            if (player.getInventory().getItemInOffHand().getType() == Material.AIR){
-                sender.sendMessage(Component.text("왼손에 제작 목표 아이템을 들어 주세요!", NamedTextColor.RED));
-                return true;
+        switch (args[0]) {
+            case "add" -> {
+                if (player.getInventory().getItemInOffHand().getType() == Material.AIR) {
+                    sender.sendMessage(Component.text("왼손에 제작 목표 아이템을 들어 주세요!", NamedTextColor.RED));
+                    return true;
+                }
+                if (IntStream.range(0, 9)
+                        .mapToObj(player.getInventory()::getItem)
+                        .toList()
+                        .stream()
+                        .allMatch(itemStack -> itemStack == null || itemStack.isEmpty())) {
+                    sender.sendMessage(Component.text("핫바에 제작 재료 아이템을 넣어 주세요!", NamedTextColor.RED));
+                    return true;
+                }
+                if (CustomRecipe.recipes.stream().anyMatch(recipe -> recipe.getKey().getKey().equals(args[1]))) {
+                    String[] argsCopy = args.clone();
+                    argsCopy[0] = "remove";
+                    remove(argsCopy, null);
+                }
+                add(args, player);
+                player.sendMessage(Component.text("레시피 ", NamedTextColor.GREEN)
+                        .append(Component.text(Main.plugin.getName() + ":" + args[1], NamedTextColor.WHITE, TextDecoration.BOLD))
+                        .append(Component.text(" 가 성공적으로 추가되었습니다!"))
+                        .append(Component.text(" [레시피 보기]", NamedTextColor.GOLD).clickEvent(ClickEvent.runCommand("/cr view " + args[1]))));
             }
-            if (IntStream.range(0, 9)
-                    .mapToObj(player.getInventory()::getItem)
-                    .toList()
-                    .stream()
-                    .allMatch(itemStack -> itemStack == null || itemStack.isEmpty())){
-                sender.sendMessage(Component.text("핫바에 제작 재료 아이템을 넣어 주세요!", NamedTextColor.RED));
-                return true;
-            }
-            if (CustomRecipe.recipes.stream().anyMatch(recipe -> recipe.getKey().getKey().equals(args[1]))){
-                String[] argsCopy = args.clone();
-                argsCopy[0] = "remove";
-                remove(argsCopy, null);
-            }
-            add(args, player);
-            player.sendMessage(Component.text("레시피 ", NamedTextColor.GREEN)
-                    .append(Component.text( Main.plugin.getName()+":"+args[1], NamedTextColor.WHITE, TextDecoration.BOLD))
-                    .append(Component.text(" 가 성공적으로 추가되었습니다!"))
-                    .append(Component.text(" [레시피 보기]", NamedTextColor.GOLD).clickEvent(ClickEvent.runCommand("/cr view "+args[1]))));
-        } else if(args[0].equals("remove")){
-            remove(args, player);
-        } else if(args[0].equals("get")){
-            get(args, player);
+            case "remove" -> remove(args, player);
+            case "get" -> get(args, player);
         }
         return true;
     }

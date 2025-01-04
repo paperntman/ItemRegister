@@ -1,7 +1,6 @@
 package org.sudaping.itemevent;
 
 import org.bukkit.Bukkit;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.sudaping.itemevent.ci.CustomInventoryCommand;
@@ -42,7 +41,6 @@ public final class Main extends JavaPlugin{
     public static File dataFolder;
     public static Main plugin;
     public static Logger logger;
-    public static InventoryHolder holder;
 
     public static void compressGzipFile(File file, ItemStack itemStack) {
         try (FileOutputStream fos = new FileOutputStream(file);
@@ -77,41 +75,6 @@ public final class Main extends JavaPlugin{
         }
         return null;
     }
-
-    public static byte[] decompressGzipBytes(byte[] compressedData) {
-        try (ByteArrayInputStream bais = new ByteArrayInputStream(compressedData);
-             GZIPInputStream gzis = new GZIPInputStream(bais);
-             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-
-            byte[] buffer = new byte[1024];
-            int len;
-
-            // GZIP 데이터에서 읽고 압축 해제
-            while ((len = gzis.read(buffer)) != -1) {
-                baos.write(buffer, 0, len);
-            }
-
-            return baos.toByteArray(); // 압축 해제된 바이트 배열 반환
-        } catch (IOException e) {
-            logger.severe("IO error: " + e.getMessage());
-        }
-        return null; // 예외 발생 시 null 반환
-    }
-
-    public static byte[] compressGzipBytes(ItemStack itemStack) {
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-             GZIPOutputStream gzos = new GZIPOutputStream(baos)) {
-
-            gzos.write(itemStack.serializeAsBytes());
-            gzos.finish(); // 압축 스트림을 마무리합니다.
-
-            return baos.toByteArray(); // 압축된 바이트 배열 반환
-        } catch (IOException e) {
-            logger.severe("IO error: " + e.getMessage());
-        }
-        return null; // 예외 발생 시 null 반환
-    }
-
 
 
     @Override
@@ -163,5 +126,6 @@ public final class Main extends JavaPlugin{
 
     @Override
     public void onDisable() {
+        super.onDisable();
     }
 }

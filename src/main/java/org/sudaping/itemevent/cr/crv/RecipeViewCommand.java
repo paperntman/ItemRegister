@@ -9,27 +9,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.sudaping.itemevent.Archive;
 import org.sudaping.itemevent.cr.CustomRecipe;
 
 import static org.sudaping.itemevent.cr.CustomRecipe.getCustomRecipeByName;
 
-public class RecipeViewCommand implements @Nullable CommandExecutor {
-
-    private static final Archive archive = Archive.load(RecipeViewCommand.class);
-    private static JsonObject map;
-
-    public RecipeViewCommand() {
-        load();
-    }
-
-    public static void load() {
-        String read = archive.read();
-        if (read == null || read.isEmpty()) {
-            map = new JsonObject();
-        }else map = JsonParser.parseString(read).getAsJsonObject();
-    }
+public class RecipeViewCommand implements CommandExecutor {
 
 
     @Override

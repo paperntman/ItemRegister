@@ -21,9 +21,7 @@ public class RecipeAnnouncementTab implements TabCompleter {
         List<String> completions = new ArrayList<>();
 
         switch (args.length) {
-            case 1 -> {
-                completions.addAll(List.of("add", "remove", "list"));
-            }
+            case 1 -> completions.addAll(List.of("add", "remove", "list"));
             case 2 -> {
                 if (args[0].equalsIgnoreCase("add")) {
                     Iterator<Recipe> recipeIterator = sender.getServer().recipeIterator();
