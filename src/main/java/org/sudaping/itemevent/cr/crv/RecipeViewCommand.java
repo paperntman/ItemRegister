@@ -1,7 +1,5 @@
 package org.sudaping.itemevent.cr.crv;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
@@ -9,7 +7,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.sudaping.itemevent.Archive;
 import org.sudaping.itemevent.cr.CustomRecipe;
 
 import static org.sudaping.itemevent.cr.CustomRecipe.getCustomRecipeByName;
